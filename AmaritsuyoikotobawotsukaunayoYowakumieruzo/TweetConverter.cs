@@ -60,14 +60,38 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
         public static string Convert(string tweet)
         {
             //------形態素解析を使わない処理
+            //----------区切る前の処理
+
+            //----------
+
+            //----------区切る処理
+            string[] sentences = tweet.Split(new Char[]{
+                '、',    //、
+                '。',    //。
+                '\n',    //改行
+                ',',     //,
+                '.',     //.
+                '　',    //全角空白
+                ' '      //半角空白
+            });
+            //----------
+
+            //----------区切った後の処理
+
+            //----------
 
             //------
 
-            List<IWord> parsedTweet = new List<IWord>(ParseSentence(tweet));
-            //------形態素解析を使う処理
+            string res = "";
+            foreach (string sentence in sentences)
+            {
+                List<IWord> parsedSentence = new List<IWord>(ParseSentence(tweet));
+                //------形態素解析を使う処理
 
-            //------
-            return parsedTweet.ToString();
+                //------
+                res += parsedSentence.ToString();
+            }
+            return res;
         }
     }
 }
