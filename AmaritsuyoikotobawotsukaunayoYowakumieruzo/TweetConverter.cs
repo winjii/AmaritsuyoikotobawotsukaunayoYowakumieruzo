@@ -13,6 +13,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 {
     public class TweetConverter
     {
+        //句点や読点などは、品詞「Other」として扱われる
         public static IEnumerable<IWord> ParseSentence(string sentence)
         {
             if (string.IsNullOrEmpty(sentence))
@@ -54,6 +55,19 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             {
                 return null;
             }
+        }
+        
+        public static string Convert(string tweet)
+        {
+            //------形態素解析を使わない処理
+
+            //------
+
+            List<IWord> parsedTweet = new List<IWord>(ParseSentence(tweet));
+            //------形態素解析を使う処理
+
+            //------
+            return parsedTweet.ToString();
         }
     }
 }
