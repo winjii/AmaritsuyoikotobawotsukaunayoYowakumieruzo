@@ -11,11 +11,13 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo.Tests
     [TestClass()]
     public class TweetConverterTests
     {
-        //[TestMethod()]
+        [TestMethod()]
         public void ParseSentenceTest()
         {
-            string input = "試合を終えて家路へ向かうサッカー部員達。 疲れからか、不幸にも黒塗りの高級車に追突してしまう。後輩をかばいすべての責任を負った三浦に対し、 車の主、暴力団員谷岡が言い渡した示談の条件とは・・・。";
-            IEnumerable<IWord> ret = TweetConverter.ParseSentence(input);
+            string input = "うちの庭には二羽鶏がいます。";
+            List<List<IWord>> chunks;
+            List<int> parentIndeces;
+            TweetConverter.ParseSentence(input, out chunks, out parentIndeces);
             Assert.Fail();
         }
     }

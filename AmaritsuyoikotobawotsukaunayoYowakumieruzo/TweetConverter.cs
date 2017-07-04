@@ -7,16 +7,65 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 {
     public class TweetConverter
     {
         //句点や読点などは、品詞「Other」として扱われる
-        public static void ParseSentence(string sentence, out List<List<IWord>> words, out List<int> parentIndeces)
+        public static void ParseSentence(string sentence, out List<List<IWord>> chunks, out List<int> parentIndeces)
         {
-            throw new NotImplementedException();
+            chunks = new List<List<IWord>>();
+            parentIndeces = new List<int>();
+
+            if (string.IsNullOrEmpty(sentence))
+            {
+                return;
+            }
+
+            string appid = ConfigurationManager.AppSettings["yahooApiKey"];
+            //string appid = ConfigurationManager.AppSettings["yahooApiKey"];
+            var uri = "https://jlp.yahooapis.jp/DAService/V1/parse?appid=" + appid + "&sentence=" +
+                      sentence;
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            try
+            {
+                WebResponse response = request.GetResponse();
+                var respStream = response.GetResponseStream();
+
+                using (StreamReader sr = new StreamReader(respStream))
+                {
+                    string res = sr.ReadToEnd();
+                    XmlDocument document = new XmlDocument();
+                    document.LoadXml(res);
+                    XmlElement root = document.DocumentElement;
+                    XmlNodeList chunkList = root.GetElementsByTagName("Chunk");
+                    for (int i = 0; i < chunkList.Count; i++)
+                    {
+                        parentIndeces.Add(-1);
+                        chunks.Add(new List<IWord>());
+                    }
+                    foreach (XmlElement chunk in chunkList)
+                    {
+                        int id = int.Parse(chunk["Id"].InnerText);
+                        parentIndeces[id] = int.Parse(chunk["Dependency"].InnerText);
+                        XmlNodeList morphemList = chunk.GetElementsByTagName("Morphem");
+                        foreach (XmlNode morphem in morphemList)
+                        {
+                            IWord word = new Word(
+                                morphem["Surface"].InnerText,
+                                morphem["Reading"].InnerText,
+                                morphem["POS"].InnerText);
+                            chunks[id].Add(word);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+
             /*
             if (string.IsNullOrEmpty(sentence))
             {
