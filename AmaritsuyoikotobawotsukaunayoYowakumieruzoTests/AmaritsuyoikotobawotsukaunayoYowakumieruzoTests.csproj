@@ -56,13 +56,16 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="DistinctStringTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TweetConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="secret.config" />
+    <None Include="secret.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AmaritsuyoikotobawotsukaunayoYowakumieruzo\AmaritsuyoikotobawotsukaunayoYowakumieruzo.csproj">
