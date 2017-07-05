@@ -48,9 +48,9 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo.Tests
                     for (int k = i + j; k < 10; k++) { expectedStr += k.ToString(); expectedIds.Add(k); }
                     DistinctString ret = dstr.Replace(i, j, replaced);
                     Console.WriteLine(expectedStr + " " + ret.Str);
-                    Console.WriteLine("\t" + expectedIds + " " + ret.Ids);
+                    Console.WriteLine("\t" + string.Join(",", expectedIds) + "," + string.Join(" ", ret.Ids));
                     Assert.AreEqual(expectedStr, ret.Str);
-                    Assert.AreEqual(expectedIds, ret.Ids);
+                    Assert.IsTrue(expectedIds.SequenceEqual(ret.Ids));
                 }
             }
         }
