@@ -7,10 +7,12 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid>
-        <Canvas x:Name="canvas" Height="272" VerticalAlignment="Top">
-            <TextBox x:Name="textBox" FontSize="50" FontFamily="ＭＳ 明朝" Width="{Binding ActualWidth, ElementName=canvas}"/>
-        </Canvas>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="417,277,0,0" VerticalAlignment="Top" Width="90" Height="32"/>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="268*"/>
+            <RowDefinition Height="51"/>
+        </Grid.RowDefinitions>
+        <Canvas x:Name="canvas" Grid.Row="0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox" Grid.Row="0" FontSize="50" FontFamily="ＭＳ 明朝"/>
+        <Button Content="焼べる" FontSize="20" HorizontalAlignment="Left" Margin="417,8.893,0,0" VerticalAlignment="Top" Width="90" Height="32" Grid.Row="1" Click="Button_Click"/>
     </Grid>
 </Window>

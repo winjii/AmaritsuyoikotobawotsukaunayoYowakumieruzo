@@ -61,6 +61,7 @@
     <Compile Include="Romanization.cs" />
     <Compile Include="StringRebuilder.cs" />
     <Compile Include="TweetConverter.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Word.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
