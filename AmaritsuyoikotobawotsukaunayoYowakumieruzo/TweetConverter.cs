@@ -13,25 +13,26 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
     public class TweetConverter
     {
         //句点や読点などは、品詞「Other」として扱われる
-        public static void ParseSentence(string sentence, out List<List<IWord>> chunks, out List<int> parentIndeces)
+        public static List<List<IWord>> ParseSentence(DistinctString sentence, out List<int> parentIndeces)
         {
-            chunks = new List<List<IWord>>();
+            List<List<IWord>> chunks = new List<List<IWord>>();
             parentIndeces = new List<int>();
 
-            if (string.IsNullOrEmpty(sentence))
+            if (string.IsNullOrEmpty(sentence.Str))
             {
-                return;
+                return chunks;
             }
 
             string appid = ConfigurationManager.AppSettings["yahooApiKey"];
             //string appid = ConfigurationManager.AppSettings["yahooApiKey"];
             var uri = "https://jlp.yahooapis.jp/DAService/V1/parse?appid=" + appid + "&sentence=" +
-                      sentence;
+                      sentence.Str;
             var request = (HttpWebRequest)WebRequest.Create(uri);
             try
             {
                 WebResponse response = request.GetResponse();
                 var respStream = response.GetResponseStream();
+                int cnt = 0;
 
                 using (StreamReader sr = new StreamReader(respStream))
                 {
@@ -52,18 +53,21 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                         XmlNodeList morphemList = chunk.GetElementsByTagName("Morphem");
                         foreach (XmlNode morphem in morphemList)
                         {
+                            string surface = morphem["Surface"].InnerText;
                             IWord word = new Word(
-                                morphem["Surface"].InnerText,
+                                new DistinctString(surface, sentence.Ids.GetRange(cnt, surface.Length)),
                                 morphem["Reading"].InnerText,
                                 morphem["POS"].InnerText);
+                            cnt += surface.Length;
                             chunks[id].Add(word);
                         }
                     }
+                    return chunks;
                 }
             }
             catch (Exception e)
             {
-                return;
+                return new List<List<IWord>>();
             }
 
             /*
@@ -109,7 +113,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             */
         }
         
-        public static string Convert(string tweet)
+        public static DistinctString Convert(string tweet)
         {
             //------形態素解析を使わない処理
             //----------区切る前の処理
@@ -134,16 +138,18 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 
             //------
 
-            string res = "";
+            DistinctString res = new DistinctString("");
             foreach (string sentence in sentences)
             {
-                List<List<IWord>> parsedSentence;
                 List<int> parentIndeces;
-                ParseSentence(sentence, out parsedSentence, out parentIndeces);
+                List<List<IWord>> parsedSentence = ParseSentence(new DistinctString(sentence), out parentIndeces);
                 //------形態素解析を使う処理(処理済み文字列はresに順次追加)
 
                 //------
-                res += parsedSentence.ToString();
+                foreach (IWord s in parsedSentence)
+                {
+                    res.Connect(s.ToKanji());
+                }
             }
             return res;
         }

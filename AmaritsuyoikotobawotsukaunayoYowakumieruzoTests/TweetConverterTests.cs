@@ -14,10 +14,10 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo.Tests
         [TestMethod()]
         public void ParseSentenceTest()
         {
-            string input = "うちの庭には二羽鶏がいます。";
+            DistinctString input = new DistinctString("うちの庭には二羽鶏がいます。");
             List<List<IWord>> chunks;
             List<int> parentIndeces;
-            TweetConverter.ParseSentence(input, out chunks, out parentIndeces);
+            chunks = TweetConverter.ParseSentence(input, out parentIndeces);
             Assert.Fail();
         }
     }

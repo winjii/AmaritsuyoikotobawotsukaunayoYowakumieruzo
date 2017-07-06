@@ -59,6 +59,7 @@
     <Compile Include="Hinshi.cs" />
     <Compile Include="IWord.cs" />
     <Compile Include="Romanization.cs" />
+    <Compile Include="StringRebuilder.cs" />
     <Compile Include="TweetConverter.cs" />
     <Compile Include="Word.cs" />
     <Page Include="MainWindow.xaml">

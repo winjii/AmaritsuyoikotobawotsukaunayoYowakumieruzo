@@ -6,18 +6,18 @@ using System.Text;
 namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo {
     class Word : IWord {
         private Hinshi _hinshi;
-        private string _surface;
+        private DistinctString _surface;
         private string _reading;
         private string _roma;
 
-        public Word(string surface, Hinshi hinshi, string reading = null, string roma = null) {
+        public Word(DistinctString surface, Hinshi hinshi, string reading = null, string roma = null) {
             _surface = surface;
             _reading = reading;
             _roma = roma;
             _hinshi = hinshi;
         }
 
-        public Word(string surface, string reading, string hinshi) {
+        public Word(DistinctString surface, string reading, string hinshi) {
             _surface = surface;
             _reading = reading;
 
@@ -57,7 +57,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo {
 
         public Hinshi GetHinshi() => _hinshi;
 
-        public string ToKanji() => _surface;
+        public DistinctString ToKanji() => _surface;
 
         public string ToHiragana() => _reading;
 
@@ -117,6 +117,6 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo {
             return builder.ToString();
         }
 
-        public override string ToString() => _surface;
+        public override string ToString() => _surface.Str;
     }
 }

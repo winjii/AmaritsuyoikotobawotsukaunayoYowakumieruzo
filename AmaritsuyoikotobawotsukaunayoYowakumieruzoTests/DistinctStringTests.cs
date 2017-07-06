@@ -11,6 +11,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo.Tests
     [TestClass()]
     public class DistinctStringTests
     {
+        /*
         [TestMethod()]
         public void DeleteTest()
         {
@@ -28,7 +29,9 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo.Tests
                 }
             }
         }
+        */
 
+        /*
         [TestMethod()]
         public void ReplaceTest()
         {
@@ -54,5 +57,6 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo.Tests
                 }
             }
         }
+        */
     }
 }

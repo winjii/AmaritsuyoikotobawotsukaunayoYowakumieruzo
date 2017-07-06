@@ -13,7 +13,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 		/// 漢字に変換
 		/// </summary>
 		/// <returns>単語の漢字+ひらがな表記</returns>
-        string ToKanji();
+        DistinctString ToKanji();
 		/// <summary>
 		/// ひらがなに変換
 		/// </summary>
