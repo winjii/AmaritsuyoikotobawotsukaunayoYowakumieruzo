@@ -23,6 +23,13 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
         public MainWindow()
         {
             InitializeComponent();
+            TweetConverter tc = new TweetConverter();
+        }
+        
+        private void Button_Click(object sender,RoutedEventArgs e)
+        {
+            TextBlock.Text = TweetConverter.Convert(TextBox.Text);
+
         }
     }
 }

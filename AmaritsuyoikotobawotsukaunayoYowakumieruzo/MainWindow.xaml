@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:AmaritsuyoikotobawotsukaunayoYowakumieruzo"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <TextBox Name="TextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" Width="120" Margin="10"/>
+        <Button Content="convert" HorizontalAlignment="Left"  Width="75" Margin="10" Click="Button_Click"/>
+        <TextBlock Name="TextBlock" Height="23" HorizontalAlignment="Left" Margin="10"/>
+    </StackPanel>
 </Window>
