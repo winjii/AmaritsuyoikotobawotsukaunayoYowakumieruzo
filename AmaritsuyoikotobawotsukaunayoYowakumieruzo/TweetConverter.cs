@@ -167,9 +167,12 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 //TODO: >>>>>>>>>>>>>>>お願いまるた<<<<<<<<<<<<<<<<<<<
 
                 //------
-                foreach (IWord s in parsedSentence)
+                foreach (List<IWord> list in parsedSentence)
                 {
-                    res.Connect(s.ToKanji());
+                    foreach (IWord s in parsedSentence)
+                    {
+                        res.Connect(s.ToKanji());
+                    }
                 }
             }
             return res;
