@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmaritsuyoikotobawotsukaunayoYowakumieruzo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid>
-        <TextBox Height="272" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" FontSize="50" FontFamily="ＭＳ 明朝"/>
+        <Canvas x:Name="canvas" Height="272" VerticalAlignment="Top">
+            <TextBox x:Name="textBox" FontSize="50" FontFamily="ＭＳ 明朝" Width="{Binding ActualWidth, ElementName=canvas}"/>
+        </Canvas>
         <Button Content="Button" HorizontalAlignment="Left" Margin="417,277,0,0" VerticalAlignment="Top" Width="90" Height="32"/>
 
     </Grid>
