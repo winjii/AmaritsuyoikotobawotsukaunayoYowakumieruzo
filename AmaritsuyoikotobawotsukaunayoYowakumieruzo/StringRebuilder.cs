@@ -49,7 +49,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                     }
                 }
                 if (i == DistinctStr.Str.Length || isDeleted[i]) continue;
-                originalIndex.Add(i);
+                originalIndex.Add(DistinctStr.Ids[i]);
             }
             return new DistinctString(string.Join("", res), originalIndex);
         }
