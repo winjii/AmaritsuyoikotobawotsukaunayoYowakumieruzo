@@ -169,7 +169,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 //------
                 foreach (List<IWord> list in parsedSentence)
                 {
-                    foreach (IWord s in parsedSentence)
+                    foreach (IWord s in list)
                     {
                         res.Connect(s.ToKanji());
                     }
