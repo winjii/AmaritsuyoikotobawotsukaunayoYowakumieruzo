@@ -42,13 +42,13 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             double x = 0, y = 0;
             for (int i = 0; i < str.Length; i++)
             {
-                res.Add(new Point(x, y));
-                x += getCharSize(str[i]);
-                if (x > textBox.ActualWidth)
+                if (x + getCharSize(str[i]) > textBox.ActualWidth)
                 {
                     x = 0;
                     y += textBox.FontSize;
                 }
+                res.Add(new Point(x, y));
+                x += getCharSize(str[i]);
             }
             return res;
         }
@@ -58,12 +58,37 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 
         }
 
+        private Storyboard getTranslationalAnimation(UIElement e, PropertyPath path, double target)
+        {
+            DoubleKeyFrame frame = new SplineDoubleKeyFrame(target, animationTime, new KeySpline(0.9, 0.05, 1 - 0.9, 1 - 0.05));
+            DoubleAnimationUsingKeyFrames animation = new DoubleAnimationUsingKeyFrames();
+            animation.KeyFrames.Add(frame);
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            Storyboard.SetTarget(animation, e);
+            Storyboard.SetTargetProperty(animation, path);
+            return storyboard;
+        }
+
+        private Storyboard getAppearanceAnimation(UIElement e)
+        {
+            e.Opacity = 0;
+            DoubleKeyFrame frame = new SplineDoubleKeyFrame(1, animationTime, new KeySpline(0.9, 0.05, 1 - 0.9, 1 - 0.05));
+            DoubleAnimationUsingKeyFrames animation = new DoubleAnimationUsingKeyFrames();
+            animation.KeyFrames.Add(frame);
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            Storyboard.SetTarget(animation, e);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
+            return storyboard;
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DistinctString pastStr = new DistinctString(textBox.Text);
             StringRebuilder rebuilder = new StringRebuilder(pastStr);
             Random rand = new Random();
-            int p = rand.Next(pastStr.Str.Length), cnt = rand.Next(pastStr.Str.Length - p) + 1;
+            int p = rand.Next(Math.Max(1, pastStr.Str.Length/2)), cnt = rand.Next(pastStr.Str.Length - p) + 1;
             rebuilder.ReserveDeletion(p, cnt);
             rebuilder.ReserveAddition(p, "lattemaltamalta");
             DistinctString newStr = rebuilder.Rebuild();
@@ -71,37 +96,36 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             List<Point> pastPos = getPos(pastStr.Str);
             List<Point> newPos = getPos(newStr.Str);
             textBox.Text = "";
+            textBox.Visibility = Visibility.Hidden;
             chars = new List<TextBox>();
-            for (int i = 0; i < pastStr.Str.Length; i++)
+            for (int i = 0; i < newStr.Str.Length; i++)
             {
                 TextBox charBox = new TextBox();
                 charBox.FontFamily = textBox.FontFamily;
-                charBox.Text = pastStr.Str[i].ToString();
+                charBox.FontSize = textBox.FontSize;
+                charBox.Text = newStr.Str[i].ToString();
                 charBox.BorderThickness = new Thickness(0);
+                charBox.Background = Brushes.Transparent;
                 charBox.IsReadOnly = true;
                 chars.Add(charBox);
                 canvas.Children.Add(charBox);
-                Canvas.SetLeft(charBox, pastPos[i].X);
-                Canvas.SetTop(charBox, pastPos[i].Y);
 
-                DoubleKeyFrame frameX = new EasingDoubleKeyFrame(newPos[i].X, animationTime);
-                DoubleAnimationUsingKeyFrames animationX = new DoubleAnimationUsingKeyFrames();
-                animationX.KeyFrames.Add(frameX);
-                Storyboard storyboardX = new Storyboard();
-                storyboardX.Children.Add(animationX);
-                Storyboard.SetTarget(animationX, charBox);
-                Storyboard.SetTargetProperty(animationX, new PropertyPath("(Canvas.Left)"));
+                int id = newStr.Ids[i];
+                if (id == -1)
+                {
+                    Canvas.SetLeft(charBox, newPos[i].X);
+                    Canvas.SetTop(charBox, newPos[i].Y);
+                    getAppearanceAnimation(charBox).Begin();
+                }
+                else
+                {
+                    Canvas.SetLeft(charBox, pastPos[id].X);
+                    Canvas.SetTop(charBox, pastPos[id].Y);
 
-                DoubleKeyFrame frameY = new EasingDoubleKeyFrame(newPos[i].Y, animationTime);
-                DoubleAnimationUsingKeyFrames animationY = new DoubleAnimationUsingKeyFrames();
-                animationY.KeyFrames.Add(frameY);
-                Storyboard storyboardY = new Storyboard();
-                storyboardY.Children.Add(animationY);
-                Storyboard.SetTarget(animationY, charBox);
-                Storyboard.SetTargetProperty(animationY, new PropertyPath("(Canvas.Top)"));
-
-                //storyboardX.Begin();
-                //storyboardY.Begin();
+                    //TODO: Beginしっぱなしでいいのか？
+                    getTranslationalAnimation(charBox, new PropertyPath("(Canvas.Left)"), newPos[i].X).Begin();
+                    getTranslationalAnimation(charBox, new PropertyPath("(Canvas.Top)"), newPos[i].Y).Begin();
+                }
             }
         }
     }
