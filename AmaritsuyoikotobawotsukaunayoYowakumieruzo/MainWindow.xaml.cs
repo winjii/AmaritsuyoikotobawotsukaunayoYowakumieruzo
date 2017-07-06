@@ -27,7 +27,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             InitializeComponent();
             fontSize = textBox.FontSize;
             FontFamily font = textBox.FontFamily;
-            string str = "TextBoxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+            string str = "TextBoxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
             textBox.Text = str;
             textBox.TextWrapping = TextWrapping.Wrap;
             chars = new List<TextBox>();
