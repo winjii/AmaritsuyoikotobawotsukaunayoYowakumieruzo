@@ -116,9 +116,17 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
         public static DistinctString Convert(DistinctString tweet)
         {
             //------形態素解析を使わない処理
-            //----------区切る前の処理
 
-            //----------
+            {
+                //----------区切る前の処理
+                //文字列の追加 -> rebuilder.ReserveAddition()
+                //文字列の削除 -> rebuilder.ReserveDeletion()
+                StringRebuilder rebuilder = new StringRebuilder(tweet);
+
+                //TODO: >>>>>>>>>>>>>>>お願いまるた<<<<<<<<<<<<<<<<<<<
+
+                tweet = rebuilder.Rebuild();
+            }
 
             //----------区切る処理
             DistinctString[] sentences = tweet.Split(new Char[]{
@@ -132,9 +140,18 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             });
             //----------
 
-            //----------区切った後の処理
+            {
+                //----------区切った後の処理
+                for (int i = 0; i < sentences.Length; i++)
+                {
+                    StringRebuilder rebuilder = new StringRebuilder(sentences[i]);
 
-            //----------
+                    //TODO: >>>>>>>>>>>>>>>お願いまるた<<<<<<<<<<<<<<<<<<<
+
+                    sentences[i] = rebuilder.Rebuild();
+                }
+
+            }
 
             //------
 
@@ -144,6 +161,10 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 List<int> parentIndeces;
                 List<List<IWord>> parsedSentence = ParseSentence(sentence, out parentIndeces);
                 //------形態素解析を使う処理(処理済み文字列はresに順次追加)
+                //Wordの削除 -> 普通に parsedSentence:List から削除していい
+                //Wordの追加 -> new Word(string)を parsedSentence 任意の場所に追加
+
+                //TODO: >>>>>>>>>>>>>>>お願いまるた<<<<<<<<<<<<<<<<<<<
 
                 //------
                 foreach (IWord s in parsedSentence)
