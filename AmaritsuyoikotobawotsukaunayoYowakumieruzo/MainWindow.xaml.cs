@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CoreTweet;
 
 namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 {
@@ -23,6 +24,8 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
     {
         private List<TextBox> chars;
         private KeyTime animationTime;
+        //TODO: Twitterに電話番号を登録
+        //OAuth2Token token = OAuth2.GetToken()
         public MainWindow()
         {
             InitializeComponent();
