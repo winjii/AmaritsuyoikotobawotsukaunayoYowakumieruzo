@@ -50,6 +50,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 }
                 if (i == DistinctStr.Str.Length || isDeleted[i]) continue;
                 originalIndex.Add(DistinctStr.Ids[i]);
+                res.Add(DistinctStr.Str[i]);
             }
             return new DistinctString(string.Join("", res), originalIndex);
         }
