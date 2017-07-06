@@ -21,6 +21,18 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             Ids = new List<int>(str.Count());
             for (int i = 0; i < str.Count(); i++) Ids.Add(i);
         }
+        public DistinctString[] Split(char[] separator)
+        {
+            string[] strings = Str.Split(separator);
+            DistinctString[] res = new DistinctString[strings.Length];
+            int cnt = 0;
+            for (int i = 0; i < strings.Length; i++)
+            {
+                res[i] = new DistinctString(strings[i], Ids.GetRange(cnt, strings[i].Length));
+                cnt += strings[i].Length;
+            }
+            return res;
+        }
         public void Connect(DistinctString ds)
         {
             Str += ds.Str;

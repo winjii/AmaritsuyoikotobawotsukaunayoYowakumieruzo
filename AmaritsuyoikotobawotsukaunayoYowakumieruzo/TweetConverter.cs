@@ -113,7 +113,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             */
         }
         
-        public static DistinctString Convert(string tweet)
+        public static DistinctString Convert(DistinctString tweet)
         {
             //------形態素解析を使わない処理
             //----------区切る前の処理
@@ -121,7 +121,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             //----------
 
             //----------区切る処理
-            string[] sentences = tweet.Split(new Char[]{
+            DistinctString[] sentences = tweet.Split(new Char[]{
                 '、',    //、
                 '。',    //。
                 '\n',    //改行
@@ -139,10 +139,10 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             //------
 
             DistinctString res = new DistinctString("");
-            foreach (string sentence in sentences)
+            foreach (DistinctString sentence in sentences)
             {
                 List<int> parentIndeces;
-                List<List<IWord>> parsedSentence = ParseSentence(new DistinctString(sentence), out parentIndeces);
+                List<List<IWord>> parsedSentence = ParseSentence(sentence, out parentIndeces);
                 //------形態素解析を使う処理(処理済み文字列はresに順次追加)
 
                 //------
