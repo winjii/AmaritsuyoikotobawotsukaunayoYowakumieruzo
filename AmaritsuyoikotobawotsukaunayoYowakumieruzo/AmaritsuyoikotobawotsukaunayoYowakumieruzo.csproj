@@ -68,6 +68,7 @@
     <Compile Include="StringRebuilder.cs" />
     <Compile Include="TweetConverter.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="WeakClauseDeleter.cs" />
     <Compile Include="Word.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
