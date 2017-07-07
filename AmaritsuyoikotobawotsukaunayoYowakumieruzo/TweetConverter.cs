@@ -136,7 +136,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 ',',     //,
                 '.',     //.
                 '　',    //全角空白
-                ' '      //半角空白
+                ' ' ,    //半角空白
                 '?',
                 '？',
                 '!',
@@ -171,7 +171,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 //Wordの追加 -> new Word(string)を parsedSentence 任意の場所に追加
 
                 //TODO: >>>>>>>>>>>>>>>お願いまるた<<<<<<<<<<<<<<<<<<<
-
+                parsedSentence = WeakClauseDeleter.Delete(parsedSentence, parentIndeces);
 
                 //------
                 foreach (List<IWord> list in parsedSentence)
