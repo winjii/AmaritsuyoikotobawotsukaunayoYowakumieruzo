@@ -137,6 +137,12 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                 '.',     //.
                 '　',    //全角空白
                 ' '      //半角空白
+                '?',
+                '？',
+                '!',
+                '！',
+                '「',
+                '」'
             });
             //----------
 
