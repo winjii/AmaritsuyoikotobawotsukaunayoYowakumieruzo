@@ -14,6 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CoreTweet;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 {
@@ -24,13 +27,21 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
     {
         private List<TextBox> chars;
         private KeyTime animationTime;
-        //TODO: Twitterに電話番号を登録
-        //OAuth2Token token = OAuth2.GetToken()
+        private Tokens tokens;
+        private OAuth.OAuthSession session;
+        private Uri url;
+        private DispatcherTimer timer;
+    
         public MainWindow()
         {
             InitializeComponent();
             textBox.TextWrapping = TextWrapping.Wrap;
             animationTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(1500));
+            session = CoreTweet.OAuth.Authorize("TCw7aPpxrpUTHM1NeKTnx0txi", "APIESaACn9G6vFoVN5Be2rDjciwniFaIaPp3Sm4zFqq4LbaI3n");
+            url = session.AuthorizeUri; // -> user open in browser
+            
+
+
         }
 
         private double getCharSize(char target)
@@ -90,11 +101,21 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
         {
             DistinctString pastStr = new DistinctString(textBox.Text);
             StringRebuilder rebuilder = new StringRebuilder(pastStr);
-            Random rand = new Random();
+            /*Random rand = new Random();
             int p = rand.Next(Math.Max(1, pastStr.Str.Length/2)), cnt = rand.Next(pastStr.Str.Length - p) + 1;
             rebuilder.ReserveDeletion(p, cnt);
             rebuilder.ReserveAddition(p, "lattemaltamalta");
-            DistinctString newStr = rebuilder.Rebuild();
+            DistinctString newStr = rebuilder.Rebuild();*/
+            DistinctString newStr = TweetConverter.Convert(pastStr);
+
+            try
+            {
+                tokens.Statuses.Update(newStr.Str);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ツイート出来ませんでした。");
+            }
 
             List<Point> pastPos = getPos(pastStr.Str);
             List<Point> newPos = getPos(newStr.Str);
@@ -129,6 +150,36 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                     getTranslationalAnimation(charBox, new PropertyPath("(Canvas.Left)"), newPos[i].X).Begin();
                     getTranslationalAnimation(charBox, new PropertyPath("(Canvas.Top)"), newPos[i].Y).Begin();
                 }
+            }
+            timer = new DispatcherTimer();
+            timer.Interval = animationTime.TimeSpan + TimeSpan.FromMilliseconds(1000);
+            timer.Tick += (s, e_) =>
+            {
+                timer.Stop();
+                foreach (TextBox charBox in chars)
+                {
+                    canvas.Children.Remove(charBox);
+                }
+                textBox.Visibility = Visibility.Visible;
+            };
+            timer.Start();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Process.Start(url.ToString());
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tokens = OAuth.GetTokens(session, pinInput.Text);
+                pinInput.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("（認証）だめみたいですね");
             }
         }
     }

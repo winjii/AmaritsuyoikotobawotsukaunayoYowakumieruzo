@@ -1,22 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Configuration;
-
 namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
 {
     public class TweetConverter
     {
+        static string[] source =
+        {
+            "かもしれない",
+            "かもしれません",
+            "と思う",
+            "と思った",
+            "と思いました",
+            "良い",
+            "いい",
+            "あまり",
+            "個人的",
+            "気がする",
+            "感じがする",
+            "そう",
+            "欲しい",
+            "なのでは",
+            "うぃーん",
+            "分からない",
+            "つらい",
+            "死にたい",
+            "づらい",
+            "終わり",
+            "だろう"
+        };
+        static string[] target =
+        {
+            "だ",
+            "です",
+            "",
+            "",
+            "",
+            "絶対良い",
+            "絶対いい",
+            "",
+            "絶対的",
+            "事実がある",
+            "事実がある",
+            "る",
+            "なければならない",
+            "なのだ",
+            "うぃーんﾋﾞｰﾄﾋﾞｰﾄひるどwwwwwwうっくっくwwwwwwえいえいえt(←いずらいt)いえいwwwwらて",
+            "完全に理解できた",
+            "世の中が最悪だ",
+            "殺す",
+            "やすい",
+            "らてまるたに奴隷にされました",
+            "だ"
+        };
+
         //句点や読点などは、品詞「Other」として扱われる
         public static List<List<IWord>> ParseSentence(DistinctString sentence, out List<int> parentIndeces)
         {
             List<List<IWord>> chunks = new List<List<IWord>>();
             parentIndeces = new List<int>();
+            
 
             if (string.IsNullOrEmpty(sentence.Str))
             {
@@ -112,7 +158,7 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
             }
             */
         }
-        
+
         public static DistinctString Convert(DistinctString tweet)
         {
             //------形態素解析を使わない処理
@@ -153,6 +199,34 @@ namespace AmaritsuyoikotobawotsukaunayoYowakumieruzo
                     StringRebuilder rebuilder = new StringRebuilder(sentences[i]);
 
                     //TODO: >>>>>>>>>>>>>>>お願いまるた<<<<<<<<<<<<<<<<<<<
+                    
+                    for (int j = 0; j < sentences[i].Str.Length; j++)
+                    {
+                        for (int b = 0; b < source.Length; b++)
+                        {
+                            if (source[b].Length + j <= sentences[i].Str.Length && sentences[i].Str.Substring(j, source[b].Length) == source[b])
+                            {
+                                rebuilder.ReserveDeletion(j, source[b].Length);
+                                rebuilder.ReserveAddition(j, target[b]);
+                            }
+                        }
+                    }
+
+                    for (int j = 1; j < sentences[i].Str.Length; j++)
+                    {
+                        //5000兆円欲しい
+                        if (sentences[i].Str[j] == '円')
+                        {
+                            int index = j - 1;
+                            for (int k = j - 1; k >= 0; k--)
+                            {
+                                if (!Util.IsHalfByRegex(sentences[i].Str[k])) break;
+                                index = k;
+                            }
+                            rebuilder.ReserveDeletion(index, j - index);
+                            rebuilder.ReserveAddition(index, "5000兆");
+                        }
+                    }
 
                     sentences[i] = rebuilder.Rebuild();
                 }
